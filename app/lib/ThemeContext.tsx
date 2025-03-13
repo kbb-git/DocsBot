@@ -29,10 +29,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setIsMounted(true);
     
     const storedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    // Use stored theme if available, otherwise use system preference
-    setIsDarkMode(storedTheme === 'dark' || (!storedTheme && prefersDark));
+    // Only use stored theme if available, otherwise default to light mode
+    setIsDarkMode(storedTheme === 'dark');
   }, []);
   
   // Update document class and localStorage when theme changes

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: checkout-docs-helper
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: VECTOR_STORE_NAME
+        sync: false
+      - key: VECTOR_STORE_ID
+        sync: false
+      - key: FILE_ID
+        sync: false 

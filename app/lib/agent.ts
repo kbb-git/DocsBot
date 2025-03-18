@@ -115,7 +115,7 @@ ${context}`
           content: input
         }
       ],
-      max_tokens: 500 // Limit token usage
+      max_tokens: 2000 // Limit token usage
     });
     
     let responseText = response.choices[0].message.content;
@@ -304,7 +304,7 @@ async function fallbackSearchDocumentation(query: string): Promise<SearchResult[
         }
       ],
       temperature: 0.2, // Lower temperature for more factual responses
-      max_tokens: 500 // Limit token usage
+      max_tokens: 2000 // Limit token usage
     });
     
     // Format the response to match our expected structure

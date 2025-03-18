@@ -77,8 +77,8 @@ export async function runCheckoutDocsAgent(input: string) {
         .filter(result => result.score > 0.7) // Only use results above a relevance threshold
         .map((result) => {
           // Truncate long content to reduce tokens
-          const content = result.content.length > 1000 
-            ? result.content.substring(0, 1000) + "..." 
+          const content = result.content.length > 5000 
+            ? result.content.substring(0, 5000) + "..." 
             : result.content;
           
           return `Content: ${content}\nSource: ${result.source}\n---\n`;

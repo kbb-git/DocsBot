@@ -69,8 +69,8 @@ async function uploadDocs() {
   
   // Text splitter for chunking documents - reduce chunk size for better results and lower token usage
   const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,  // Changed from 500 to 1000
-    chunkOverlap: 100, // Changed from 50 to 100
+    chunkSize: 5000,  // Changed from 1000 to 5000
+    chunkOverlap: 200, // Changed from 100 to 200
   });
   
   let totalChunks = 0;

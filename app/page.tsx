@@ -174,15 +174,91 @@ export default function HomePage() {
 
   // Helper function to format message content with better styling
   const formatMessageContent = (content: string) => {
-    // Add debug logging for API response codes
-    if (content.includes("API response codes for soft declines from Checkout.com")) {
-      console.log("Detected API response codes content");
-      console.log("Content length:", content.length);
+    // First, detect if the content contains tables and handle them specially
+    if (content.includes('|')) {
+      // Extract table sections from the content
+      const tableSections: string[] = [];
+      const contentWithoutTables = content.replace(/\n([\s]*\|[^\n]+\|\n)([\s]*\|[^\n]+\|\n)+([\s]*\|[^\n]+\|)?/g, 
+        (match) => {
+          tableSections.push(match);
+          return '\n{{TABLE_PLACEHOLDER_' + (tableSections.length - 1) + '}}\n';
+        }
+      );
+
+      // Process the non-table content with standard formatting
+      let formattedContent = contentWithoutTables
+        // Headers
+        .replace(/^### (.*$)/gm, '<h3 class="message-h3">$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2 class="message-h2">$1</h2>')
+        .replace(/^# (.*$)/gm, '<h1 class="message-h1">$1</h1>')
+        
+        // Emphasis
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        
+        // Ordered and unordered lists
+        .replace(/^\s*\d+\.\s+(.*?)$/gm, (match, item) => {
+          return `<li>${item}</li>`;
+        })
+        .replace(/^\s*\*\s+(.*?)$/gm, (match, item) => {
+          return `<li>${item}</li>`;
+        })
+        .replace(/^\s*-\s+(.*?)$/gm, (match, item) => {
+          return `<li>${item}</li>`;
+        })
+        
+        // Fix nested lists by adding start/end tags
+        .replace(/(<li>.*<\/li>)(\n)(?=<li>)/g, '$1</ul><ul>');
       
-      // Count code items
-      const codeItemMatches = content.match(/\*\*\d+\*\*/g) || [];
-      console.log("Number of API code items found:", codeItemMatches.length);
-      console.log("API codes:", codeItemMatches.map(m => m.replace(/\*\*/g, '')).join(', '));
+      // Process code blocks
+      formattedContent = formattedContent.replace(/```(.*?)\n([\s\S]*?)```/g, (match, language, code) => {
+        return `<pre><code class="${language}">${code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+      });
+      
+      // Process inline code
+      formattedContent = formattedContent.replace(/`(.*?)`/g, '<code>$1</code>');
+      
+      // Group list items in ul tags
+      formattedContent = formattedContent.replace(/(<li>.*?<\/li>)(?:\s*\n\s*<li>.*?<\/li>)*/g, '<ul>$&</ul>');
+      
+      // Convert newlines to <br> tags outside of specific elements
+      formattedContent = formattedContent.replace(/\n(?![<])/g, '<br>');
+      
+      // Process tables and replace placeholders
+      tableSections.forEach((tableText: string, index: number) => {
+        // Parse the markdown table
+        const tableRows = tableText.trim().split('\n');
+        let htmlTable = '<div class="table-responsive"><table class="markdown-table">';
+        
+        tableRows.forEach((row: string, rowIndex: number) => {
+          const cells = row.split('|').slice(1, -1); // Remove first and last empty cells
+          
+          if (cells.length > 0) {
+            if (rowIndex === 0) {
+              // Header row
+              htmlTable += '<thead><tr>';
+              cells.forEach((cell: string) => {
+                htmlTable += `<th>${cell.trim()}</th>`;
+              });
+              htmlTable += '</tr></thead><tbody>';
+            } else if (rowIndex === 1 && cells.every((cell: string) => cell.trim().match(/^[-:]+$/))) {
+              // This is the separator row, skip it
+            } else {
+              // Data row
+              htmlTable += '<tr>';
+              cells.forEach((cell: string) => {
+                htmlTable += `<td>${cell.trim()}</td>`;
+              });
+              htmlTable += '</tr>';
+            }
+          }
+        });
+        
+        htmlTable += '</tbody></table></div>';
+        formattedContent = formattedContent.replace(`{{TABLE_PLACEHOLDER_${index}}}`, htmlTable);
+      });
+      
+      return formattedContent;
     }
     
     // Special handling for API response codes from Checkout.com

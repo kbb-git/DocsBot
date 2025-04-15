@@ -1,25 +1,26 @@
 :root {
-  --primary-color: #0075ff;
-  --primary-dark: #0055cc;
+  --primary-color: #1e88e5;
+  --primary-dark: #1565c0;
   --text-color: #333;
   --light-gray: #f5f5f5;
   --border-color: #e0e0e0;
   --code-bg: #f0f0f0;
-  --code-block-bg: #f8f8f8;
-  --json-key-color: #0451a5;
-  --json-value-color: #50a14f;
-  --json-string-color: #a31515;
-  --background-color: #fff;
-  --chat-bg-color: #fafafa;
-  --message-bg-color: white;
-  --message-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --code-block-bg: #f5f7f9;
+  --json-key-color: #2e73b8;
+  --json-value-color: #448c27;
+  --json-string-color: #c41a16;
+  --background-color: #ffffff;
+  --chat-bg-color: #f0f2f5;
+  --message-bg-color: #ffffff;
+  --message-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   --header-box-shadow-color: rgba(0, 0, 0, 0.1);
-  --bot-text-color: #424242;
-  --bot-heading-color: #212121;
-  --bot-strong-color: #333;
-  --bot-label-color: #333;
-  --bot-separator-color: #333;
+  --bot-text-color: #333333;
+  --bot-heading-color: #1e1e1e;
+  --bot-strong-color: #1565c0;
+  --bot-label-color: #1a237e;
+  --bot-separator-color: #777777;
   --code-text-color: #3a4c5f;
+  --hover-color: #f0f7ff;
 }
 
 .dark-mode {
@@ -628,4 +629,50 @@ button {
 
 .bot-message a:hover {
   border-bottom-color: var(--primary-color);
+}
+
+/* Table styles for markdown tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.markdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1rem;
+  color: var(--bot-text-color);
+  border: 1px solid var(--border-color);
+}
+
+.markdown-table th,
+.markdown-table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.markdown-table th {
+  font-weight: 600;
+  background-color: var(--code-block-bg);
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--bot-heading-color);
+}
+
+.markdown-table tr:nth-child(even) {
+  background-color: var(--code-block-bg);
+}
+
+.markdown-table tr:hover {
+  background-color: var(--hover-color);
+}
+
+/* Ensure code in tables is properly displayed */
+.markdown-table code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 } 

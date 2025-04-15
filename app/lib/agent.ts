@@ -233,19 +233,42 @@ async function searchDocumentation(query: string): Promise<DocumentationSearchRe
       
       if (response.output_text && response.output_text.trim() !== '') {
         // If there are no file citations but we have output text,
-        // the model might have answered from its knowledge
-        console.log("No file citations but received output text from the model");
-        return {
-          results: [{
-            content: response.output_text,
-            source: "Model knowledge - no document citations",
-            score: 0.8
-          }],
-          error: {
-            type: "NoDocumentMatches",
-            message: "The search didn't find relevant documents in the knowledge base."
-          }
-        };
+        // Check if the response appears to contain documentation content
+        const outputText = response.output_text.trim();
+        const hasDocIndicators = 
+          // Check for text that suggests documentation references
+          outputText.includes("documentation excerpt") || 
+          outputText.includes("This is supported in the documentation") ||
+          // Check for response code patterns that match your documentation format
+          /\"\d{5}\s[A-Z][a-z]+\s[a-z]+\s-\s[a-z\s]+\"/.test(outputText) ||
+          // Check for multiple formatted error codes (likely from docs)
+          (outputText.match(/\d{5}/g) || []).length >= 2;
+        
+        if (hasDocIndicators) {
+          // Likely found info from docs despite missing citations
+          console.log("Output appears to contain documentation despite missing citations");
+          return {
+            results: [{
+              content: outputText,
+              source: "Checkout.com documentation", // No specific citation
+              score: 0.9
+            }]
+          };
+        } else {
+          // Fall back to the existing behavior for general knowledge
+          console.log("No file citations but received output text from the model");
+          return {
+            results: [{
+              content: outputText,
+              source: "Model knowledge - no document citations",
+              score: 0.8
+            }],
+            error: {
+              type: "NoDocumentMatches",
+              message: "The search didn't find relevant documents in the knowledge base."
+            }
+          };
+        }
       }
       
       // No results found, fall back to general knowledge

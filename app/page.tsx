@@ -703,13 +703,6 @@ export default function HomePage() {
               <a href="https://www.checkout.com/docs" target="_blank" rel="noopener noreferrer">View Official Documentation →</a>
             </div>
           )}
-          
-          {message.hasVectorStoreError && (
-            <div className="vector-store-error">
-              <div className="error-badge">Knowledge Base Error</div>
-              <p>The information you requested could not be found in our knowledge base. I've provided a general answer instead.</p>
-            </div>
-          )}
         </div>
       );
     }
@@ -814,13 +807,6 @@ export default function HomePage() {
               <a href="https://www.checkout.com/docs" target="_blank" rel="noopener noreferrer">View Official Documentation →</a>
             </div>
           )}
-          
-          {message.hasVectorStoreError && (
-            <div className="vector-store-error">
-              <div className="error-badge">Knowledge Base Error</div>
-              <p>The information you requested could not be found in our knowledge base. I've provided a general answer instead.</p>
-            </div>
-          )}
         </div>
       );
     }
@@ -835,13 +821,6 @@ export default function HomePage() {
         {message.role === 'assistant' && (
           <div className="documentation-link">
             <a href="https://www.checkout.com/docs" target="_blank" rel="noopener noreferrer">View Official Documentation →</a>
-          </div>
-        )}
-        
-        {message.hasVectorStoreError && (
-          <div className="vector-store-error">
-            <div className="error-badge">Knowledge Base Error</div>
-            <p>The information you requested could not be found in our knowledge base. I've provided a general answer instead.</p>
           </div>
         )}
       </div>

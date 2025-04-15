@@ -93,7 +93,7 @@ export async function runCheckoutDocsAgent(input: string) {
     // Use OpenAI to generate a response based on the context
     // Switching from GPT-3.5 Turbo to GPT-4o mini for better quality while still controlling token usage
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       messages: [
         {
           role: "system",
@@ -153,7 +153,7 @@ async function searchDocumentation(query: string): Promise<DocumentationSearchRe
     try {
       // Format exactly as shown in the example
       const requestPayload = {
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         input: query,
         instructions: "You are a helpful assistant that searches Checkout.com documentation",
         tools: [
@@ -289,7 +289,7 @@ async function fallbackSearchDocumentation(query: string): Promise<SearchResult[
   try {
     // Use the chat completions API as a fallback
     const retrievalResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       messages: [
         {
           role: "system",
